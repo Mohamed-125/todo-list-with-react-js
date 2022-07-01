@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://github.com/Mohamed-125/todo-list-with-backend-.git",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
