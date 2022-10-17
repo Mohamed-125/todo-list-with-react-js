@@ -4,26 +4,10 @@ function Form({ setTodos, todos, setSelected }) {
   const inputRef = useRef();
   const formSubmitHandler = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        "https://todo-api-xd.herokuapp.com/api/add",
-        {
-          title: inputRef?.current.value,
-          date: Math.floor(Math.random() * 188823238 + 1),
-          completed: false,
-        },
-        {
-          headers: {
-            token: "dontRepeatYourSelf",
-          },
-        }
-      )
-      .then(() =>
-        axios
-          .post("https://todo-api-xd.herokuapp.com/api/get")
-          .then((result) => setTodos(result.data))
-      );
-
+    setTodos([
+      ...todos,
+      { title: inputRef.current.value, id: Math.random() * 3534556 },
+    ]);
     inputRef.current.value = null;
   };
   return (

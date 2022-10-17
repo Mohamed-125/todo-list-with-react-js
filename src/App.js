@@ -3,16 +3,14 @@ import axios from "axios";
 import Form from "./components/Form";
 import { FaTrash, FaCheck } from "react-icons/fa";
 const App = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("todos"))
+      ? JSON.parse(localStorage.getItem("todos"))
+      : []
+  );
   const [selected, setSelected] = useState("All");
+  const [isRendered, setIsRendered] = useState(false);
   const [filteredTodos, setFilteredTodos] = useState([]);
-
-  useEffect(() => {
-    axios
-      .post("https://todo-api-xd.herokuapp.com/api/get")
-      .then((result) => setTodos(result.data))
-      .catch((res) => console.log(res));
-  }, []);
 
   useEffect(() => {
     switch (selected) {
@@ -29,8 +27,12 @@ const App = () => {
   }, [todos, selected]);
 
   useEffect(() => {
-    console.log(filteredTodos);
-  }, [filteredTodos]);
+    if (isRendered) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    } else {
+      setIsRendered(true);
+    }
+  }, [todos]);
 
   return (
     <div>
@@ -40,7 +42,7 @@ const App = () => {
           {Array.isArray(filteredTodos) &&
             filteredTodos.map((todo) => {
               return (
-                <div className="todo" id={todo._id} key={todo.id}>
+                <div className="todo" id={todo.id} key={todo.id}>
                   <li className="todo-item">
                     {todo.title}
                     <div style={{ display: "flex", gap: "20px" }}>
@@ -56,28 +58,12 @@ const App = () => {
                         }}
                       />
                       <FaTrash
+                        id={todo.id}
                         className="fa-trash"
                         onClick={(e) => {
-                          axios
-                            .post(
-                              `https://todo-api-xd.herokuapp.com/api/remove`,
-                              {
-                                id: e.target.parentNode.parentNode.parentNode
-                                  .id,
-                              },
-                              {
-                                headers: {
-                                  token: "dontRepeatYourSelf",
-                                },
-                              }
-                            )
-                            .then(() =>
-                              axios
-                                .post(
-                                  "https://todo-api-xd.herokuapp.com/api/get"
-                                )
-                                .then((result) => setTodos(result.data))
-                            );
+                          setTodos((pre) =>
+                            pre.filter((todof) => todof.id !== todo.id)
+                          );
                         }}
                       />
                     </div>
