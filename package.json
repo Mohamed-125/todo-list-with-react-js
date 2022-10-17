@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "homepage": "https://github.com/Mohamed-125/todo-list-with-react-js.git",
+  "homepage": "https://github.com/Mohamed-125/todo-list-with-react-js",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
